@@ -1,23 +1,29 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // <-- IMPORT USE SELECTOR
 import DashboardLayout from './components/DashboardLayout';
+import AdminLayout from './components/AdminLayout';
 import LoginPage from './pages/LoginPage';
-import RegistrationPage from './pages/RegistrationPage'; // <-- 1. IMPORT THE NEW PAGE
-
-// Set this to false to see your login and registration pages
-const isAuthenticated = false; 
+import RegistrationPage from './pages/RegistrationPage';
 
 function App() {
+  // Get the auth state from the Redux store
+  const { isLoggedIn, userRole } = useSelector((state) => state.auth);
+
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegistrationPage />} /> {/* <-- 2. ADD THE NEW ROUTE */}
+        <Route path="/register" element={<RegistrationPage />} />
         
         <Route 
           path="/*" 
           element={
-            isAuthenticated ? <DashboardLayout /> : <Navigate to="/login" />
+            isLoggedIn ? (
+              userRole === 'admin' ? <AdminLayout /> : <DashboardLayout />
+            ) : (
+              <Navigate to="/login" />
+            )
           } 
         />
       </Routes>

@@ -1,8 +1,19 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar } from '@mui/material';
+import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar } from '@mui/material';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import HistoryIcon from '@mui/icons-material/History';
+import { Link } from 'react-router-dom'; // <-- 1. IMPORT LINK
 
 const Sidebar = () => {
   const drawerWidth = 240;
+
+  // 2. UPDATE MENU ITEMS WITH PATHS
+  const menuItems = [
+    { text: 'Dashboard', icon: <AccountBalanceWalletIcon />, path: '/' },
+    { text: 'Apply for Loan', icon: <RequestQuoteIcon />, path: '/apply-loan' },
+    { text: 'Transaction History', icon: <HistoryIcon />, path: '/history' },
+  ];
 
   return (
     <Drawer
@@ -15,10 +26,12 @@ const Sidebar = () => {
     >
       <Toolbar />
       <List>
-        {['My Accounts', 'Apply for Loan', 'History'].map((text) => (
-          <ListItem key={text} disablePadding>
+        {menuItems.map((item) => (
+          // 3. WRAP LIST ITEM IN A LINK
+          <ListItem key={item.text} component={Link} to={item.path} disablePadding sx={{ color: 'inherit', textDecoration: 'none' }}>
             <ListItemButton>
-              <ListItemText primary={text} />
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
             </ListItemButton>
           </ListItem>
         ))}
