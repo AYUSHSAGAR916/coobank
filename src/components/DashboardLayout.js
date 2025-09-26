@@ -1,22 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import { Routes, Route } from 'react-router-dom'; // <-- 1. IMPORT ROUTING TOOLS
+import { Routes, Route } from 'react-router-dom';
 import MemberDashboardPage from '../pages/MemberDashboardPage';
-import LoanApplicationPage from '../pages/LoanApplicationPage'; // <-- 2. IMPORT THE NEW PAGE
+import LoanApplicationPage from '../pages/LoanApplicationPage';
+import ProfilePage from '../pages/ProfilePage';
+import TransactionHistoryPage from '../pages/TransactionHistoryPage'; // <-- 1. IMPORT THE NEW PAGE
 
 const DashboardLayout = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <Navbar />
-      <Sidebar />
+      <Navbar handleDrawerToggle={handleDrawerToggle} />
+      <Sidebar mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: '64px' }}>
-        {/* 3. SET UP THE ROUTES FOR THE DASHBOARD AREA */}
         <Routes>
           <Route path="/" element={<MemberDashboardPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/apply-loan" element={<LoanApplicationPage />} />
-          {/* We can add more routes here later, like for transaction history */}
+          <Route path="/history" element={<TransactionHistoryPage />} /> {/* <-- 2. ADD THE NEW ROUTE */}
         </Routes>
       </Box>
     </Box>
